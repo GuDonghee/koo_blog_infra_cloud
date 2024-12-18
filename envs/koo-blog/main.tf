@@ -8,7 +8,7 @@ locals {
 
 module "vpc" {
   source = "../../modules/vpc"
-  vpc_name = "K00-Blog"
+  vpc_name = "Koo-Blog"
   vpc_cidr = local.vpc_cidr
   public_subnets = local.public_subnets
 }
