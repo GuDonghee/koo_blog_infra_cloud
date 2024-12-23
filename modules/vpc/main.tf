@@ -19,3 +19,16 @@ resource "aws_subnet" "public" {
     ManagedBy = "Terraform"
   }
 }
+
+resource "aws_subnet" "private" {
+  count      = length(var.private_subnets.cidrs)
+  vpc_id     = aws_vpc.this.id
+  cidr_block = var.private_subnets.cidrs[count.index]
+
+  availability_zone = var.private_subnets.azs[count.index]
+
+  tags = {
+    Name      = "${var.vpc_name}-private-subnet"
+    ManagedBy = "Terraform"
+  }
+}

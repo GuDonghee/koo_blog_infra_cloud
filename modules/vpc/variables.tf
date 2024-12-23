@@ -13,3 +13,9 @@ variable "public_subnets" {
   type        = map(list(string))
   default     = {}
 }
+
+variable "private_subnets" {
+  description = "해당 VPC의 프라이빗 서브넷의 CIDR 목록입니다."
+  type        = map(list(string))
+  default     = {}
+}
