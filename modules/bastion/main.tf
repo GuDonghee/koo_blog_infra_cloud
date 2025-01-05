@@ -68,7 +68,7 @@ resource "aws_security_group" "bastion" {
   }
 
   tags = {
-    Name      = "${var.bastion_prefix}-bastion-secu-group"
+    Name      = "${var.bastion_prefix}-bastion-security-group"
     ManagedBy = "Terraform"
   }
 }
