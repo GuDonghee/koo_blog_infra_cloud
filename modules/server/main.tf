@@ -13,6 +13,8 @@ resource "aws_instance" "this" {
   subnet_id     = var.subnet_id
   key_name      = var.server_key_name
 
+  associate_public_ip_address = true
+
   vpc_security_group_ids = [
     aws_security_group.server.id
   ]
@@ -31,6 +33,13 @@ resource "aws_security_group" "server" {
     protocol    = "tcp"
     from_port   = 80
     to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 22
+    to_port     = 22
     cidr_blocks = ["0.0.0.0/0"]
   }
 
