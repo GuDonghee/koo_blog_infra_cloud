@@ -1,3 +1,16 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-northeast-2"
+}
+
 locals {
   vpc_cidr = "10.1.0.0/16"
 
@@ -29,11 +42,7 @@ module "bastion" {
   bastion_prefix   = "koo-blog"
 }
 
-module "server" {
-  source        = "../../modules/server"
-  vpc_id = module.vpc.vpc_id
-  subnet_id     = module.vpc.private_subnet_ids[0]
-  instance_type = "t2.micro"
-  server_key_name  = "koo-blog-server"
-  server_prefix    = "koo-blog"
+module "ecs" {
+  source     = "../../modules/ecs"
+  ecs_name = "koo-blog"
 }
