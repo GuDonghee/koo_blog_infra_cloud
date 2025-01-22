@@ -7,64 +7,63 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "ecs_task_logs" {
-  name = "${var.ecs_name}-api"
+resource "aws_ecs_task_definition" "main" {
+  family                   = "${var.ecs_name}-task"
+  network_mode             = "awsvpc"
+  execution_role_arn       = aws_iam_role.task_execution_role.arn
+  requires_compatibilities = ["FARGATE"]
 
-  tags = {
-    Name      = "${var.ecs_name}-api-task-logs",
-    ManagedBy = "Terraform"
-  }
-}
+  cpu    = 256
+  memory = 512
 
-resource "aws_iam_role" "task_execution_role" {
-  name               = "${var.ecs_name}-task-exec-role"
-  assume_role_policy = jsonencode({
-    Version   = "2012-10-17"
-    Statement = [
-      {
-        Effect    = "Allow"
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com"
+  container_definitions = jsonencode([
+    {
+      name         = "${var.ecs_name}-server"
+      image        = "418272801638.dkr.ecr.ap-northeast-2.amazonaws.com/koo-blog:latest"
+      cpu          = 256
+      memory       = 512
+      portMappings = [
+        {
+          containerPort = 80
+          hostPort      = 80
+          protocol      = "tcp"
         }
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
+      ]
+    }
+  ])
 
   tags = {
-    Name      = "${var.ecs_name}-api-task-logs",
+    Name      = "${var.ecs_name}-task-definition",
     ManagedBy = "Terraform"
   }
 }
 
-resource "aws_iam_policy" "task_execution_role_policy" {
-  name   = "${var.ecs_name}-task-exec-role-policy"
-  path   = "/"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "ecr:GetAuthorizationToken",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents",
-        ]
-        Resource = "*"
-      }
-    ]
-  })
+resource "aws_ecs_service" "main" {
+  name            = "${var.ecs_name}-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.main.arn
+  desired_count   = 1
 
-  tags = {
-    Name      = "${var.ecs_name}-task-exec-role-policy"
-    ManagedBy = "Terraform"
+  network_configuration {
+    subnets         = var.subnet_ids
+    security_groups = [aws_security_group.main.id]
   }
 }
 
-resource "aws_iam_role_policy_attachment" "task-exec-role" {
-  role       = aws_iam_role.task_execution_role.name
-  policy_arn = aws_iam_policy.task_execution_role_policy.arn
+resource "aws_security_group" "main" {
+  description = "Control ecs container inbound and outbound access"
+  name        = "${var.ecs_name}-container-sg"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name      = "${var.ecs_name}-containger-sg"
+    ManagedBy = "Terraform"
+  }
 }

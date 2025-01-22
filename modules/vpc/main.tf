@@ -16,7 +16,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name      = "${var.vpc_name}-public-subnet"
+    Name      = "${var.vpc_name}-public-subnet-${count.index}"
     ManagedBy = "Terraform"
   }
 }
@@ -29,7 +29,7 @@ resource "aws_subnet" "private" {
   availability_zone = var.private_subnets.azs[count.index]
 
   tags = {
-    Name      = "${var.vpc_name}-private-subnet"
+    Name      = "${var.vpc_name}-private-subnet-${count.index}"
     ManagedBy = "Terraform"
   }
 }
