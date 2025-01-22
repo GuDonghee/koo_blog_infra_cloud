@@ -57,7 +57,7 @@ resource "aws_instance" "this" {
 
 resource "aws_security_group" "bastion" {
   description = "Control bastion inbound and outbound access"
-  name        = "${var.bastion_prefix}-bastion"
+  name        = "${var.bastion_prefix}-bastion-sg"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -68,7 +68,7 @@ resource "aws_security_group" "bastion" {
   }
 
   tags = {
-    Name      = "${var.bastion_prefix}-bastion-security-group"
+    Name      = "${var.bastion_prefix}-bastion-sg"
     ManagedBy = "Terraform"
   }
 }
