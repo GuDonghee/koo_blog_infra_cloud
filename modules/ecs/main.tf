@@ -19,13 +19,13 @@ resource "aws_ecs_task_definition" "main" {
   container_definitions = jsonencode([
     {
       name         = "${var.ecs_name}-server"
-      image        = "418272801638.dkr.ecr.ap-northeast-2.amazonaws.com/koo-blog:latest"
+      image        = "418272801638.dkr.ecr.ap-northeast-2.amazonaws.com/koo-blog:59f9a53"
       cpu          = 256
       memory       = 512
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = 8080
+          hostPort      = 8080
           protocol      = "tcp"
         }
       ]
@@ -61,6 +61,13 @@ resource "aws_security_group" "main" {
     from_port   = 80
     to_port     = 80
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port     = 0
+    protocol      = "-1"
+    to_port       = 0
+    cidr_blocks   = ["0.0.0.0/0"]
   }
 
   tags = {

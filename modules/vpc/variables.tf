@@ -19,3 +19,8 @@ variable "private_subnets" {
   type        = map(list(string))
   default     = {}
 }
+
+variable "nat_subnet_index" {
+  description = "NAT 게이트웨이가 생성될 서브넷의 인덱스입니다."
+  type        = number
+}

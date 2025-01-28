@@ -31,6 +31,7 @@ module "vpc" {
   vpc_cidr        = local.vpc_cidr
   public_subnets  = local.public_subnets
   private_subnets = local.private_subnets
+  nat_subnet_index = 0
 }
 
 module "bastion" {

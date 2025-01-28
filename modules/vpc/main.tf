@@ -34,11 +34,33 @@ resource "aws_subnet" "private" {
   }
 }
 
+resource "aws_eip" "eip" {
+  count  = length(var.private_subnets.cidrs) == 0 ? 0 : 1
+  domain = "vpc"
+
+  tags = {
+    Name      = "${var.vpc_name}-nat-eip"
+    ManagedBy = "Terraform"
+  }
+}
+
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.this.id
 
   tags = {
     Name      = "${var.vpc_name}-igw"
+    ManagedBy = "Terraform"
+  }
+}
+
+resource "aws_nat_gateway" "nat" {
+  count         = length(var.private_subnets.cidrs) == 0 ? 0 : 1
+  allocation_id = aws_eip.eip[0].id
+  subnet_id     = aws_subnet.public[var.nat_subnet_index].id
+
+  tags = {
+    Name      = "${var.vpc_name}-nat"
     ManagedBy = "Terraform"
   }
 }
