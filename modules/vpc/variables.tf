@@ -24,3 +24,9 @@ variable "nat_subnet_index" {
   description = "NAT 게이트웨이가 생성될 서브넷의 인덱스입니다."
   type        = number
 }
+
+variable "api_lb_port" {
+  description = "Koo-Blog로 향하는 로드밸런서의 포트"
+  type        = number
+  default     = 80
+}

@@ -12,3 +12,8 @@ variable "subnet_ids" {
   description = "프라이빗 서브넷 아이디 목록"
   type        = list(string)
 }
+
+variable "api_lb_target_group_arn" {
+  description = "Koo Blog의 로드밸런싱 타켓그룹 ARN"
+  type        = string
+}

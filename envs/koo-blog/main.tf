@@ -15,8 +15,8 @@ locals {
   vpc_cidr = "10.1.0.0/16"
 
   public_subnets = {
-    cidrs = ["10.1.64.0/18"]
-    azs   = ["ap-northeast-2c"]
+    cidrs = ["10.1.0.0/18", "10.1.64.0/18"]
+    azs   = ["ap-northeast-2c", "ap-northeast-2a"]
   }
 
   private_subnets = {
@@ -48,4 +48,5 @@ module "ecs" {
   vpc_id = module.vpc.vpc_id
   ecs_name = "koo-blog"
   subnet_ids = module.vpc.private_subnet_ids
+  api_lb_target_group_arn = module.vpc.api_lb_target_group_arn
 }

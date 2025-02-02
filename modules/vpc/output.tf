@@ -12,3 +12,8 @@ output "private_subnet_ids" {
   description = "프라이빗 서브넷 아이디 목록"
   value       = try(aws_subnet.private.*.id, null)
 }
+
+output "api_lb_target_group_arn" {
+  description = "Koo Blog의 로드밸런서 타켓그룹 ARN"
+  value       = aws_lb_target_group.main.arn
+}
