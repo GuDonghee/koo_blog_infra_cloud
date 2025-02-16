@@ -50,3 +50,9 @@ module "ecs" {
   subnet_ids = module.vpc.private_subnet_ids
   api_lb_target_group_arn = module.vpc.api_lb_target_group_arn
 }
+
+module "eks" {
+  source   = "../../modules/eks"
+  eks_name = "koo-blog"
+  subnet_ids = module.vpc.private_subnet_ids
+}
