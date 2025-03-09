@@ -32,6 +32,7 @@ module "vpc" {
   public_subnets  = local.public_subnets
   private_subnets = local.private_subnets
   nat_subnet_index = 0
+  eks_nodes_sg_id = module.eks.eks_nodes_sg_id
 }
 
 module "bastion" {
@@ -43,16 +44,19 @@ module "bastion" {
   bastion_prefix   = "koo-blog"
 }
 
-module "ecs" {
-  source   = "../../modules/ecs"
-  vpc_id = module.vpc.vpc_id
-  ecs_name = "koo-blog"
-  subnet_ids = module.vpc.private_subnet_ids
-  api_lb_target_group_arn = module.vpc.api_lb_target_group_arn
-}
+# module "ecs" {
+#   source   = "../../modules/ecs"
+#   vpc_id = module.vpc.vpc_id
+#   ecs_name = "koo-blog"
+#   subnet_ids = module.vpc.private_subnet_ids
+#   api_lb_target_group_arn = module.vpc.api_lb_target_group_arn
+# }
 
 module "eks" {
   source   = "../../modules/eks"
   eks_name = "koo-blog"
   subnet_ids = module.vpc.private_subnet_ids
+  vpc_id = module.vpc.vpc_id
+  vpc_cidr = local.vpc_cidr 
+  lb_sg_id = module.vpc.lb_sg_id
 }

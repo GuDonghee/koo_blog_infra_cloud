@@ -12,6 +12,11 @@ resource "aws_iam_role" "eks_cluster_role" {
       }
     ]
   })
+
+  tags = {
+    Name      = "${var.eks_name}-cluster-role",
+    ManagedBy = "Terraform"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
@@ -33,6 +38,11 @@ resource "aws_iam_role" "eks_node_role" {
       }
     ]
   })
+
+  tags = {
+    Name      = "${var.eks_name}-node-role",
+    ManagedBy = "Terraform"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "eks_node_policy" {

@@ -30,3 +30,8 @@ variable "api_lb_port" {
   type        = number
   default     = 80
 }
+
+variable "eks_nodes_sg_id" {
+  description = "EKS 노드 그룹의 보안 그룹 ID"
+  type        = string
+}
