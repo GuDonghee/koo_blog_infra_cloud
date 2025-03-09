@@ -33,7 +33,7 @@ resource "aws_security_group" "eks_nodes_sg" {
   # 노드 간 통신을 위한 인바운드 규칙
   ingress {
     from_port   = 0
-    to_port     = 65535
+    to_port     = 0
     protocol    = "-1"
     self        = true
     description = "Allow nodes to communicate with each other"

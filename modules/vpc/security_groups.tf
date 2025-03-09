@@ -21,7 +21,6 @@ resource "aws_security_group" "lb" {
     from_port       = 0
     to_port         = 65535
     protocol        = "tcp"
-    security_groups = [var.eks_nodes_sg_id]
   }
 
   tags = {
