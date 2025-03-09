@@ -43,13 +43,13 @@ module "bastion" {
   bastion_prefix   = "koo-blog"
 }
 
-module "ecs" {
-  source   = "../../modules/ecs"
-  vpc_id = module.vpc.vpc_id
-  ecs_name = "koo-blog"
-  subnet_ids = module.vpc.private_subnet_ids
-  api_lb_target_group_arn = module.vpc.api_lb_target_group_arn
-}
+# module "ecs" {
+#   source   = "../../modules/ecs"
+#   vpc_id = module.vpc.vpc_id
+#   ecs_name = "koo-blog"
+#   subnet_ids = module.vpc.private_subnet_ids
+#   api_lb_target_group_arn = module.vpc.api_lb_target_group_arn
+# }
 
 module "eks" {
   source   = "../../modules/eks"

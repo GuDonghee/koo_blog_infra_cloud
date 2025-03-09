@@ -26,6 +26,9 @@ resource "aws_eks_node_group" "eks_node_group" {
     min_size     = 1
   }
 
+  instance_types = ["t3.medium"]
+  disk_size = 20
+
   depends_on = [ aws_eks_cluster.eks_cluster, aws_iam_role.eks_node_role ]
 
   tags = {
