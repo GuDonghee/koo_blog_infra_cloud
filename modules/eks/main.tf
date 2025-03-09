@@ -4,6 +4,9 @@ resource "aws_eks_cluster" "eks_cluster" {
 
   vpc_config {
     subnet_ids = var.subnet_ids
+    endpoint_public_access  = false
+    endpoint_private_access = true
+    security_group_ids      = [aws_security_group.eks_cluster_sg.id]
   }
 
   tags = {
@@ -28,6 +31,10 @@ resource "aws_eks_node_group" "eks_node_group" {
 
   instance_types = ["t3.medium"]
   disk_size = 20
+
+  remote_access {
+    source_security_group_ids = [aws_security_group.eks_nodes_sg.id]
+  }
 
   depends_on = [ aws_eks_cluster.eks_cluster, aws_iam_role.eks_node_role ]
 
